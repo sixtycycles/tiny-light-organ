@@ -74,7 +74,7 @@ def main(argv):
         #it acts as a trigger event
         #
         if win4.count_window() == winSize4:
-            out = Filters.ActionGate(win4.get()).gate()
+            out = Filters.ActionGate(win4.get()).gate(300)
             #if an event is created:
             #send special message for one shot sound.
             if out:

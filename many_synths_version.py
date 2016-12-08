@@ -9,9 +9,9 @@ import time
 
 
 def main(argv):
-    winSize1 = 24
+    winSize1 = 4
     winSize2 = 24
-    winSize3 = 24
+    winSize3 = 4
     winSize4 = 3
     ser = serial.Serial("/dev/cu.usbmodemFA131")  # Mac OS X example
     ser.flushInput()
@@ -55,13 +55,14 @@ def main(argv):
                 client.send_message('/synth1', [out,control])
             win1.clear()
 
+
         if win2.count_window() == winSize2:
             # this "degree" takes the window input, maps it to appropriate values
             out = Filters.Mapper(win2.get()).map(0.5, 1.5)
             # this takes the mapped window and returns the mean value.
             out = Filters.Reducto(out).reduce_min()
-            out = out * fundamentalFrequency
-            if out:
+
+            if out >200:
                 client = udp_client.SimpleUDPClient("127.0.0.1", 57120)
                 client.send_message('/synth2', [out,control])
             win2.clear()
@@ -70,20 +71,22 @@ def main(argv):
             out = Filters.Mapper(win3.get()).map(1.0, 2.0)
             # this takes the mapped window and returns the mean value.
             out = Filters.Reducto(out).reduce_min()
-            out = out * fundamentalFrequency
-            if out:
+            out = out * 110
+
+            if out < 200:
+                print("BOOSH")
                 client = udp_client.SimpleUDPClient("127.0.0.1", 57120)
                 client.send_message('/synth3', [out,control])
-                out = False
+
             win3.clear()
         if win4.count_window() == winSize4:
             # this "degree" takes the window input, maps it to appropriate values
-            out = Filters.ActionGate(win4.get()).gate()
+            out = Filters.ActionGate(win4.get()).gate(200)
             if out:
                 client = udp_client.SimpleUDPClient("127.0.0.1", 57120)
                 client.send_message('/talk', [out, control])
 
-            print(out)
+
             win4.clear()
 
 if __name__ == "__main__":

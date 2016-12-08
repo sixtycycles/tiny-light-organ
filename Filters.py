@@ -41,7 +41,7 @@ class ActionGate(object):
         self.window = window
         self.unique = []
 
-        #because it needed a method.
+        #SORTS THE WINDOW
     def do(self):
         for i in self.window:
             if i not in self.unique:
@@ -49,15 +49,20 @@ class ActionGate(object):
         self.returnvals = sorted(self.unique)
         self.out = [self.returnvals[0],self.returnvals[len(self.returnvals)-1]]
         return self.out
+    #RETURN DIFFERENCE IN WINDOW VALUES
     def getDiff(self):
         range = self.do()
         #subtract high val from low val return difference.
         self.out = range[1] - range[0]
         return self.out
-    def gate(self):
-        if self.getDiff() > 200:
+    #IF GATE BIGgER THAN THIS
+    def gate(self,threshold):
+        self.threshold = threshold
+        if self.getDiff() > self.threshold:
             #print(self.out)
             return self.out
+    def gate2(self):
+        pass
 
 #maps window input to range 0-1 to make useable value ranges.
 class Mapper(object):

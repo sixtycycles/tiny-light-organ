@@ -11,7 +11,7 @@ import math
 
 def main(argv):
 
-    winSize1, winSize2, winSize3 = 2, 2, 2
+    winSize1, winSize2, winSize3 = 8,8,8
     ser = serial.Serial("/dev/cu.usbmodemFA131")  # Mac OS X example
     ser.flushInput()
 
@@ -19,7 +19,7 @@ def main(argv):
     win2 = Filters.Window(winSize2)
     win3 = Filters.Window(winSize3)
 
-    noisereduction = Filters.Window(10)
+
 
     while ser.readline():
         #clean arduino formatting.
@@ -35,43 +35,46 @@ def main(argv):
         win1.add(sensor1)
         win2.add(sensor2)
         win3.add(sensor3)
-        noisereduction.add([sensor1,sensor2,sensor3])
-        outStream = {'freq': 1000 ,'filter': 1000, 'time':0.1,'position':0.0}
+
+        outStream = []
+
+
 
         #one window with gate and degree selection:
         if win1.count_window() == winSize1:
 
             #this "degree" takes the window input, maps it to appropriate values
-            degree = (Filters.map_1_to_0(win1.get()).map())
+            degree = (Filters.Mapper(win1.get()).map(0.0,1.0))
             #this takes the mapped window and returns the mean value.
             degree = Filters.Reducto(degree).reduce_mean()
 
-            outStream['time'] = degree
+            outStream.append(degree)
             win1.clear()
 
         if win2.count_window() == winSize2:
-            filter = Filters.Reducto(win2.get()).reduce_mean()
-            #divide by 500 to get values that the RQ parameter of the Equalizer can accept.
-            outStream['filter'] = filter
+            # this "degree" takes the window input, maps it to appropriate values
+            out = (Filters.Mapper(win2.get()).map(400.0, 10000.0))
+            # this takes the mapped window and returns the mean value.
+            out = Filters.Reducto(out).reduce_max()
+            outStream.append(out)
             win2.clear()
 
         if win3.count_window() == winSize3:
-            position = Filters.map_1_to_0(win3.get()).map()
-            position = Filters.Reducto(position).reduce_mean()
-            outStream['position'] = position
+            # this "degree" takes the window input, maps it to appropriate values
+            out = (Filters.Mapper(win3.get()).map(0.01, 1.0))
+            # this takes the mapped window and returns the mean value.
+            out = Filters.Reducto(out).reduce_min()
+            outStream.append(out)
             win3.clear()
-        #noise reduction takes a look at all values from all sensors and returns only the ones that are duplicated more than twice across all sensors.
-        #this returns only the duplicated values, and so requires further processing as the size of the return is changeable.
 
 
-        if outStream['time'] != 0.1 :
-            dict = [outStream['time'], outStream['freq'],outStream['filter'],outStream['position']]
-            print(dict)
+        if outStream  :
+            out = outStream
+            print(out)
             client = udp_client.SimpleUDPClient("127.0.0.1", 57120)
-            client.send_message('/synth2', dict)
+            client.send_message('/grains', out)
             outStream.clear()
-        #else:
-            #print('stream')
+
 
 
 if __name__ == "__main__":
