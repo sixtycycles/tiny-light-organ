@@ -11,7 +11,7 @@ import math
 
 def main(argv):
 
-    winSize1, winSize2, winSize3 = 8,8,8
+    winSize1, winSize2, winSize3 = 16,8,4
     ser = serial.Serial("/dev/cu.usbmodemFA131")  # Mac OS X example
     ser.flushInput()
 
@@ -53,7 +53,7 @@ def main(argv):
 
         if win2.count_window() == winSize2:
             # this "degree" takes the window input, maps it to appropriate values
-            out = (Filters.Mapper(win2.get()).map(400.0, 10000.0))
+            out = (Filters.Mapper(win2.get()).map(500.0, 10000.0))
             # this takes the mapped window and returns the mean value.
             out = Filters.Reducto(out).reduce_max()
             outStream.append(out)

@@ -62,7 +62,7 @@ def main(argv):
             # this takes the mapped window and returns the mean value.
             out = Filters.Reducto(out).reduce_min()
 
-            if out >200:
+            if out >400:
                 client = udp_client.SimpleUDPClient("127.0.0.1", 57120)
                 client.send_message('/synth2', [out,control])
             win2.clear()
