@@ -73,7 +73,7 @@ def main(argv):
             out = Filters.Reducto(out).reduce_min()
             out = out * 110
 
-            if out < 200:
+            if out < 170 :
                 print("BOOSH")
                 client = udp_client.SimpleUDPClient("127.0.0.1", 57120)
                 client.send_message('/synth3', [out,control])
