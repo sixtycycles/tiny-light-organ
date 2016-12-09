@@ -9,10 +9,10 @@ import time
 
 
 def main(argv):
-    winSize1 = 12
-    winSize2 = 12
-    winSize3 = 12
-    winSize4 = 33
+    winSize1 = 4
+    winSize2 = 4
+    winSize3 = 4
+    winSize4 = 8
     ser = serial.Serial("/dev/cu.usbmodemFA131")  # Mac OS X example
     ser.flushInput()
     # 3 windows on each sensor stream.
@@ -46,29 +46,29 @@ def main(argv):
         win4.add(sensor3)
         outStream = []
         #one window with gate and degree selectiRon:
-        if win1.count_window() == winSize1:
-
-            # this "degree" takes the window input, maps it to appropriate values
-            out = (Filters.Mapper(win1.get()).map(100,900))
-            # this takes the mapped window and returns the mean value.
-            out = Filters.Reducto(out).reduce_min()
-            # set the key
-            outStream.append(out)
-            win1.clear()
-
-        if win2.count_window() == winSize2:
-            out = Filters.Reducto(win2.get()).reduce_mean()
-            out = out*5
-            outStream.append(out)
-            win2.clear()
-
-        #win3 returns the mean value from the window
-        if win3.count_window() == winSize3:
-            out = Filters.Mapper(win3.get()).map(0,1)
-            out = Filters.Reducto(out).reduce_max()
-            outStream.append(out*440)
-
-            win3.clear()
+        # if win1.count_window() == winSize1:
+        #
+        #     # this "degree" takes the window input, maps it to appropriate values
+        #     out = (Filters.Mapper(win1.get()).map(100,900))
+        #     # this takes the mapped window and returns the mean value.
+        #     out = Filters.Reducto(out).reduce_min()
+        #     # set the key
+        #     outStream.append(out)
+        #     win1.clear()
+        #
+        # if win2.count_window() == winSize2:
+        #     out = Filters.Reducto(win2.get()).reduce_mean()
+        #     out = out*5
+        #     outStream.append(out)
+        #     win2.clear()
+        #
+        # #win3 returns the mean value from the window
+        # if win3.count_window() == winSize3:
+        #     out = Filters.Mapper(win3.get()).map(0,1)
+        #     out = Filters.Reducto(out).reduce_max()
+        #     outStream.append(out*440)
+        #
+        #     win3.clear()
 
         #win4  is a special case. it takes all values from all sensors and windows them.
         #it acts as a trigger event

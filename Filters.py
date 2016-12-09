@@ -3,7 +3,7 @@ __author__ = 'Rod OConnor'
 from numpy import interp
 import math
 
-
+#window holds values. should be transparrent how this works. everything is called in the main program to make it easy to trace actions.
 class Window(object):
     def __init__(self, window_size):
         self.window_size = window_size
@@ -23,7 +23,7 @@ class Window(object):
     def count_window(self):
         return len(self.window)
 
-
+#dont use this;
 class OrderReduce(object):
     def __init__(self,list):
         self.list = list
@@ -59,12 +59,11 @@ class ActionGate(object):
     def gate(self,threshold):
         self.threshold = threshold
         if self.getDiff() > self.threshold:
-            #print(self.out)
+            #then return window
             return self.out
-    def gate2(self):
-        pass
 
-#maps window input to range 0-1 to make useable value ranges.
+
+#maps window input to range set by arguments to make usable value ranges.
 class Mapper(object):
     def __init__(self,window):
         self.window = window
@@ -73,15 +72,11 @@ class Mapper(object):
         self.minOut = minOut
         self.maxOut = maxOut
         #the first array is the input range, this has to be scaled depending on how much light there is.
-        #the second array is the output range, which can change
+        #the second array is the output range, which can change depending on what you need it for.
         out = interp(self.window,[50.0,700.0],[minOut,maxOut])
         return out
 
-
-
-
-
-
+#reduce class: methods for  extracting 1 tuple from
 class Reducto(object):
     def __init__(self,window):
         self.window = window
@@ -97,7 +92,7 @@ class Reducto(object):
 
     def reduce_max(self):
         return max(self.window)
-
+    #this method returns the full window, so you will want to call it with another, like min or max. or just select an index.
     def floorIt(self):
         win = []
         for i in self.window:
