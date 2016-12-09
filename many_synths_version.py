@@ -57,7 +57,9 @@ def main(argv):
             out = Filters.Mapper(win1.get()).map(0.0,1.0)
             # this takes the mapped window and returns the mean value.
             out = Filters.Reducto(out).reduce_min()
+            #multiply the value by the fundamental to get an audible frequency:( 0.x * 220 == not sub audible)
             out = out*fundamentalFrequency
+            #if the operation produces results do this:
             if out:
                 print(str(out) + " from window 1")
                 client = udp_client.SimpleUDPClient("127.0.0.1", 57120)
