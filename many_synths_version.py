@@ -14,7 +14,7 @@ def main(argv):
     #set initial window sizes. try these larger for more time between events or a slower change rate for sounds
     #bigger window = more time.
     winSize1 = 4
-    winSize2 = 24
+    winSize2 = 8
     winSize3 = 4
     winSize4 = 3
 
@@ -27,7 +27,7 @@ def main(argv):
     # this stream is a window of all three sensor streams together at once.
     win4 = Filters.Window(winSize4)
     #this is a root note, can be any audible frequency. try 440 if this is too bass heavy.
-    fundamentalFrequency = 220
+    fundamentalFrequency = 330
 
     while ser.readline():
         # clean arduino formatting.
