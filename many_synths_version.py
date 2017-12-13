@@ -4,7 +4,7 @@ import sys
 import serial
 from pythonosc import udp_client
 import Filters
-
+ 
 #DO NOT use time.sleep in these loops. the sleep time refers back to the instance of the window that was gathered when the loop started,
 #  and so gets really memory hungry after a while. oops!
 

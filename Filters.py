@@ -8,7 +8,7 @@ class Window(object):
     def __init__(self, window_size):
         self.window_size = window_size
         self.clear()
-
+ 
     def add(self, tuple):
         self.window.append(tuple)
         if self.count_window() > self.window_size:
@@ -98,4 +98,3 @@ class Reducto(object):
         for i in self.window:
             win.append(math.floor(self.window[i]))
         return win
-

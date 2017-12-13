@@ -11,7 +11,7 @@ SynthDef(\sines,{ |out =0 freq=440, filter = 5600,phase = 0.3,sustain =1 amp=0.3
 	audio = Pan2.ar(RLPF.ar(audio,filter,1.23),0);
 	audio = audio* EnvGen.ar(Env.sine,1, levelScale:amp,timeScale:sustain ,doneAction:2);
 	OffsetOut.ar(out,audio);
-}).store;
+}).store; 
 
 SynthDef(\square,{ |out =0 freq=440, mod = 220,sustain =1 amp=0.3|
 	var audio;
